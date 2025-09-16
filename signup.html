@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Auth Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --success: #10b981;
+            --error: #ef4444;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background: var(--bg-card);
+            border-radius: 20px;
+            box-shadow: 0 20px 25px -5px var(--shadow), 0 10px 10px -5px var(--shadow);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+        }
+
+        .auth-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 25px 30px -5px var(--shadow), 0 15px 15px -5px var(--shadow);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            width: 60px;
+            height: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 3px;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-slider {
+            width: 24px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 50%;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+
+        [data-theme="dark"] .theme-slider {
+            transform: translateX(30px);
+        }
+
+        .auth-header {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+
+        .auth-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-subtitle {
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            font-weight: 300;
+        }
+
+        .auth-form {
+            padding: 40px 30px;
+        }
+
+        .form-tabs {
+            display: flex;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            margin-bottom: 30px;
+            padding: 4px;
+            position: relative;
+        }
+
+        .tab-button {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tab-button.active {
+            color: var(--accent);
+            background: var(--bg-card);
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 18px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus + .input-icon {
+            color: var(--accent);
+        }
+
+        .otp-section {
+            display: none;
+            animation: slideInUp 0.5s ease;
+        }
+
+        .otp-section.show {
+            display: block;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .otp-inputs {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: 600;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .otp-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn.loading {
+            color: transparent;
+        }
+
+        .submit-btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid white;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .divider span {
+            background: var(--bg-card);
+            padding: 0 20px;
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .error-message, .success-message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .auth-form {
+                padding: 30px 20px;
+            }
+            
+            .auth-header {
+                padding: 30px 20px;
+            }
+            
+            .otp-inputs {
+                gap: 8px;
+            }
+            
+            .otp-input {
+                width: 45px;
+                height: 45px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <div class="theme-slider">🌙</div>
+    </div>
+
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1 class="auth-title" id="header-title">Welcome</h1>
+            <p class="auth-subtitle" id="header-subtitle">SIH Winners</p>
+            <p class="auth-description" id="header-description"></p>
+        </div>
+
+        <div class="auth-form">
+            <div id="message-container"></div>
+
+            <div class="form-tabs">
+                <button class="tab-button active" onclick="switchTab('login')">Login</button>
+                <button class="tab-button" onclick="switchTab('register')">Register</button>
+            </div>
+
+            <form id="auth-form">
+                <div id="register-fields">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <div style="position: relative;">
+                            <input type="text" class="form-input" id="name" placeholder="Enter your full name" required>
+                            <span class="input-icon">👤</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email or Mobile Number</label>
+                    <div style="position: relative;">
+                        <input type="text" class="form-input" id="email-mobile" placeholder="Enter email or mobile number" required>
+                        <span class="input-icon">📧</span>
+                    </div>
+                </div>
+
+                <div class="otp-section" id="otp-section">
+                    <div class="form-group">
+                        <label class="form-label">Enter OTP</label>
+                        <div class="otp-inputs">
+                            <input type="text" class="otp-input" maxlength="1" oninput="handleOtpInput(this, 0)">
+                            <input type="text" class="otp-input" maxlength="1" oninput="handleOtpInput(this, 1)">
+                            <input type="text" class="otp-input" maxlength="1" oninput="handleOtpInput(this, 2)">
+                            <input type="text" class="otp-input" maxlength="1" oninput="handleOtpInput(this, 3)">
+                            <input type="text" class="otp-input" maxlength="1" oninput="handleOtpInput(this, 4)">
+                            <input type="text" class="otp-input" maxlength="1" oninput="handleOtpInput(this, 5)">
+                        </div>
+                        <p style="text-align: center; color: var(--text-secondary); font-size: 14px;">
+                            Didn't receive OTP? <a href="#" style="color: var(--accent);" onclick="resendOtp()">Resend</a>
+                        </p>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submit-btn">
+                    <span id="btn-text">Continue</span>
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>or continue with</span>
+            </div>
+
+            <div class="social-buttons">
+                <a href="#" class="social-btn">
+                    <span>🔍</span>
+                    Google
+                </a>
+                <a href="#" class="social-btn">
+                    <span>📘</span>
+                    Facebook
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'login';
+        let otpSent = false;
+        let userData = {};
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const slider = document.querySelector('.theme-slider');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                slider.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                slider.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                document.querySelector('.theme-slider').textContent = '☀️';
+            }
+        }
+
+        // Switch between login and register
+        function switchTab(mode) {
+            currentMode = mode;
+            const tabs = document.querySelectorAll('.tab-button');
+            const registerFields = document.getElementById('register-fields');
+            const btnText = document.getElementById('btn-text');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (mode === 'register') {
+                registerFields.style.display = 'block';
+                btnText.textContent = 'Create Account';
+            } else {
+                registerFields.style.display = 'none';
+                btnText.textContent = 'Sign In';
+            }
+            
+            // Reset form
+            resetForm();
+        }
+
+        // Handle OTP input
+        function handleOtpInput(element, index) {
+            if (element.value.length === 1) {
+                const nextInput = document.querySelectorAll('.otp-input')[index + 1];
+                if (nextInput) {
+                    nextInput.focus();
+                }
+            }
+            
+            // Check if all OTP fields are filled
+            const otpInputs = document.querySelectorAll('.otp-input');
+            const allFilled = Array.from(otpInputs).every(input => input.value.length === 1);
+            
+            if (allFilled) {
+                const otp = Array.from(otpInputs).map(input => input.value).join('');
+                console.log('OTP entered:', otp);
+            }
+        }
+
+        // Show message
+        function showMessage(message, type = 'error') {
+            const container = document.getElementById('message-container');
+            container.innerHTML = `<div class="${type}-message">${message}</div>`;
+            
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
+        // Simulate sending OTP
+        function sendOtp(contact) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    console.log(`OTP sent to: ${contact}`);
+                    const simulatedOTP = Math.floor(100000 + Math.random() * 900000);
+                    console.log(`Simulated OTP: ${simulatedOTP}`);
+                    resolve(simulatedOTP);
+                }, 1000);
+            });
+        }
+
+        // Resend OTP
+        async function resendOtp() {
+            if (userData.contact) {
+                showMessage('Sending new OTP...', 'success');
+                await sendOtp(userData.contact);
+                showMessage('New OTP sent successfully!', 'success');
+            }
+        }
+
+        // Validate email or mobile
+        function validateContact(contact) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const mobileRegex = /^[+]?[\d\s-()]{10,}$/;
+            
+            return emailRegex.test(contact) || mobileRegex.test(contact);
+        }
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('auth-form').reset();
+            document.getElementById('otp-section').classList.remove('show');
+            document.getElementById('btn-text').textContent = currentMode === 'login' ? 'Sign In' : 'Create Account';
+            otpSent = false;
+            userData = {};
+            document.getElementById('message-container').innerHTML = '';
+        }
+
+        // Handle form submission
+        document.getElementById('auth-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submit-btn');
+            const btnText = document.getElementById('btn-text');
+            
+            if (!otpSent) {
+                // First step: Send OTP
+                const name = document.getElementById('name').value;
+                const contact = document.getElementById('email-mobile').value;
+                
+                if (!contact) {
+                    showMessage('Please enter email or mobile number');
+                    return;
+                }
+                
+                if (!validateContact(contact)) {
+                    showMessage('Please enter a valid email or mobile number');
+                    return;
+                }
+                
+                if (currentMode === 'register' && !name) {
+                    showMessage('Please enter your full name');
+                    return;
+                }
+                
+                // Store user data
+                userData = { name, contact, mode: currentMode };
+                
+                // Show loading
+                submitBtn.classList.add('loading');
+                
+                try {
+                    await sendOtp(contact);
+                    
+                    // Show OTP section
+                    document.getElementById('otp-section').classList.add('show');
+                    btnText.textContent = 'Verify OTP';
+                    otpSent = true;
+                    
+                    showMessage('OTP sent successfully! Check your email/SMS.', 'success');
+                } catch (error) {
+                    showMessage('Failed to send OTP. Please try again.');
+                } finally {
+                    submitBtn.classList.remove('loading');
+                }
+                
+            } else {
+                // Second step: Verify OTP
+                const otpInputs = document.querySelectorAll('.otp-input');
+                const otp = Array.from(otpInputs).map(input => input.value).join('');
+                
+                if (otp.length !== 6) {
+                    showMessage('Please enter complete OTP');
+                    return;
+                }
+                
+                submitBtn.classList.add('loading');
+                
+                // Simulate OTP verification
+                setTimeout(() => {
+                    console.log('User Data to Save:', userData);
+                    console.log('Entered OTP:', otp);
+                    
+                    // Here you would typically verify OTP with backend
+                    showMessage(`${currentMode === 'register' ? 'Account created' : 'Login'} successful!`, 'success');
+                    
+                    submitBtn.classList.remove('loading');
+
+                     // Save signup status
+                    localStorage.setItem("isSignedUp", "true");
+                    
+                    // Check if user came from download page
+                    const pendingDownload = localStorage.getItem('pendingDownload');
+                    if (pendingDownload) {
+                        // Show download success message
+                        setTimeout(() => {
+                            showMessage('🎉 Registration successful! Starting download...', 'success');
+                            
+                            // Simulate download start (replace with actual download links)
+                            setTimeout(() => {
+                                const downloadLinks = {
+                                    'desktop': 'https://yourdomain.com/downloads/securewipe-desktop.exe',
+                                    'android': 'https://yourdomain.com/downloads/securewipe-android.apk',
+                                    'bootable': 'https://yourdomain.com/downloads/securewipe-bootable.iso'
+                                };
+                                
+                                // For now, just show success message
+                                // In real app: window.location.href = downloadLinks[pendingDownload];
+                                showMessage(`✅ Your ${pendingDownload} download would start now!`, 'success');
+                                
+                                // Clear the pending download
+                                localStorage.removeItem('pendingDownload');
+                            }, 1500);
+                        }, 1000);
+                    } else {
+                        // Reset form after success for regular registration
+                        setTimeout(() => {
+                            resetForm();
+                        }, 2000);
+                    }
+                }, 1500);
+            }
+        });
+
+        // Initialize theme on load
+        loadTheme();
+        
+        // Check for platform parameter from landing page
+        checkPlatformInfo();
+        
+        // Check for platform info function
+        function checkPlatformInfo() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const platform = urlParams.get('platform');
+            const source = urlParams.get('source');
+            
+            if (platform && source === 'download') {
+                // Update header based on platform
+                const headerTitle = document.getElementById('header-title');
+                const headerSubtitle = document.getElementById('header-subtitle');
+                
+                const platformNames = {
+                    'desktop': 'Windows/Linux',
+                    'android': 'Android',
+                    'bootable': 'Bootable USB/ISO'
+                };
+                
+                const platformIcons = {
+                    'desktop': '💻',
+                    'android': '📱',
+                    'bootable': '🔥'
+                };
+                
+                headerTitle.innerHTML = `${platformIcons[platform]} SecureWipe Pro`;
+                headerSubtitle.innerHTML = `Register to download ${platformNames[platform]} version`;
+                
+                // Show platform-specific message
+                showMessage(`🚀 You're downloading SecureWipe Pro for ${platformNames[platform]}. Please register to continue.`, 'success');
+                
+                // Store platform for after registration
+                localStorage.setItem('pendingDownload', platform);
+            }
+        }
+
+        // Handle backspace in OTP inputs
+        document.addEventListener('keydown', function(e) {
+            if (e.target.classList.contains('otp-input') && e.key === 'Backspace') {
+                if (e.target.value === '') {
+                    const otpInputs = document.querySelectorAll('.otp-input');
+                    const currentIndex = Array.from(otpInputs).indexOf(e.target);
+                    if (currentIndex > 0) {
+                        otpInputs[currentIndex - 1].focus();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
