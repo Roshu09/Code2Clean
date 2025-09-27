@@ -12,13 +12,13 @@
         }
 
         :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
+            --bg-primary:  #3355c4;
+            --bg-secondary: #3d84f5;
             --bg-card: #ffffff;
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --border: #e5e7eb;
-            --accent: #3b82f6;
+            --text-primary: #171b23;
+            --text-secondary: #0b0d0f;
+            --border: #c2c5cd;
+            --accent: #3b82f5;
             --accent-hover: #2563eb;
             --success: #10b981;
             --error: #ef4444;
@@ -26,13 +26,13 @@
         }
 
         [data-theme="dark"] {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-card: #1e293b;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --border: #334155;
-            --shadow: rgba(0, 0, 0, 0.3);
+            --bg-primary: #347aea;
+            --bg-secondary: #2a47a9;
+            --bg-card: #182333;
+            --text-primary: #ffffff;
+            --text-secondary: #dae2ec;
+            --border: #3f4f65;
+            --shadow: rgba(160, 49, 49, 0.3);
         }
 
         body {
@@ -66,12 +66,12 @@
         .theme-toggle {
             position: absolute;
             top: 20px;
-            right: 20px;
+            right: 50px;
             background: var(--bg-card);
             border: 2px solid var(--border);
             border-radius: 50px;
-            width: 60px;
-            height: 30px;
+            width: 85px;
+            height: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -84,8 +84,8 @@
         }
 
         .theme-slider {
-            width: 24px;
-            height: 24px;
+            width: 40px;
+            height: 40px;
             background: var(--accent);
             border-radius: 50%;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -405,13 +405,34 @@
                 height: 45px;
             }
         }
+
+       .back-home-btn {
+    position: absolute;   /* stick to the page instead of the form */
+    top: 30px;         /* distance from top of page */
+    left: 100px;        /* distance from left of page */
+    padding: 8px 15px;
+    background: rgb(51, 95, 216);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background 0.3s ease, transform 0.2s ease;
+    z-index: 1000;     /* keep it above the form */
+}
+.back-home-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
     </style>
 </head>
 <body>
     <div class="theme-toggle" onclick="toggleTheme()">
         <div class="theme-slider">🌙</div>
     </div>
-
+<div>
+    <a href="index.html" class="back-home-btn">⬅ Back to Home</a>>
+</div>
     <div class="auth-container">
         <div class="auth-header">
             <h1 class="auth-title" id="header-title">Welcome to</h1>
@@ -482,6 +503,8 @@
                     Facebook
                 </a>
             </div>
+          
+</div> 
         </div>
     </div>
 
