@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SecureWipe Pro - Trustworthy IT Asset Recycling</title>
+    <title>Code2Clean - Trustworthy IT Asset Recycling</title>
     <style>
         * {
             margin: 0;
@@ -45,23 +45,178 @@
             overflow-x: hidden;
         }
 
-        /* Theme Toggle */
-        .theme-toggle {
+        /* Navbar */
+        .navbar {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.1);
             z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .navbar {
+            background: rgba(30, 41, 59, 0.95);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] .navbar.scrolled {
+            background: rgba(30, 41, 59, 0.98);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo:hover {
+            color: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-item a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-item a:hover {
+            color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-item a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-item a:hover::after {
+            width: 80%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-register-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-decoration: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .nav-register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Theme Toggle - Updated position */
+        .theme-toggle {
             background: var(--white);
             border: 2px solid var(--primary);
             border-radius: 50px;
-            width: 60px;
-            height: 30px;
+            width: 50px;
+            height: 25px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            padding: 3px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 2px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .mobile-menu-btn span {
+            width: 25px;
+            height: 3px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
+            }
+            
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .nav-actions {
+                gap: 0.5rem;
+            }
+            
+            .nav-register-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
         }
 
         .theme-slider {
@@ -459,12 +614,111 @@
             font-size: 0.9rem;
         }
 
-        /* Footer */
-        .footer {
-            background: var(--dark);
-            color: white;
+        /* Customer Reviews Section */
+        .reviews-section {
+            background: linear-gradient(135deg, var(--light) 0%, var(--white) 100%);
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .reviews-title {
             text-align: center;
-            padding: 2rem 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .reviews-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .review-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
+        }
+
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .reviewer-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .reviewer-info h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .reviewer-info p {
+            margin: 0;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .review-rating {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .star {
+            color: #fbbf24;
+            font-size: 1.2rem;
+        }
+
+        .review-text {
+            color: var(--text);
+            line-height: 1.7;
+            font-style: italic;
+            position: relative;
+        }
+
+        .review-text::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            font-size: 3rem;
+            color: var(--primary);
+            opacity: 0.3;
         }
 
         /* Responsive */
@@ -510,9 +764,47 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        .logo-icon {
+  width: 60px;   /* adjust size */
+  height: 60px;  /* keep it square */
+  margin-left: 8px;  /* space between icon and text */
+  vertical-align: middle;
+}
+
     </style>
 </head>
 <body>
+    <!-- Fixed Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="nav-logo">
+                <img src="logo.png" alt="Code2Clean Logo" class="logo-icon">
+                Code2Clean
+            </a>
+            
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="#support">Products</a></li>
+                <li class="nav-item"><a href="#resources">Resources</a></li>
+                <li class="nav-item"><a href="#customers">Customers</a></li>
+                <li class="nav-item"><a href="#products">Support</a></li>
+            </ul>
+            
+            <div class="nav-actions">
+                <a href="signup.html" class="nav-register-btn">Register / Login</a>
+                <div class="theme-toggle" onclick="toggleTheme()">
+                    <div class="theme-slider">🌙</div>
+                </div>
+            </div>
+            
+            <div class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
     <div class="bg-animation">
         <div class="floating-shapes">
             <div class="shape"></div>
@@ -527,10 +819,10 @@
     </div>
 
     <!-- Hero Section -->
-    <section class="header">
+    <section class="header" id="home">
         <div class="hero-content">
             <div class="hero-badge">🏆 SIH 2025 Innovation Project</div>
-            <h1 class="hero-title">SecureWipe Pro</h1>
+            <h1 class="hero-title">Code2Clean</h1>
             <p class="hero-subtitle">
                 Military-grade secure data wiping solution for trustworthy IT asset recycling. 
                 NIST SP 800-88 compliant with tamper-proof digital certificates.
@@ -539,9 +831,9 @@
     </section>
 
     <!-- Features Section -->
-    <section class="features">
+    <section class="features" id="products">
         <div class="container">
-            <h2 class="section-title">Why Choose SecureWipe Pro?</h2>
+            <h2 class="section-title">Why Choose Code2Clean?</h2>
             <p class="section-subtitle">
                 Enterprise-grade security meets user-friendly design for complete data sanitization
             </p>
@@ -599,7 +891,7 @@
     </section>
 
     <!-- Technical Specifications -->
-    <section class="specs-section">
+    <section class="specs-section" id="resources">
         <div class="container">
             <h2 class="section-title">Technical Specifications</h2>
             <div class="specs-grid">
@@ -628,9 +920,9 @@
     </section>
 
     <!-- Download Section -->
-    <section class="download-section">
+    <section class="download-section" id="support">
         <div class="container">
-            <h2 class="download-title">Download SecureWipe Pro</h2>
+            <h2 class="download-title">Download Code2Clean</h2>
             <p class="download-subtitle">
                 Choose your platform and start securing your data today
             </p>
@@ -666,10 +958,142 @@
         </div>
     </section>
 
+    <!-- Customer Reviews Section -->
+    <section class="reviews-section" id="customers">
+        <div class="container">
+            <h2 class="reviews-title">What Our Customers Say</h2>
+            <p class="reviews-subtitle">
+                Trusted by enterprises, government agencies, and IT professionals worldwide
+            </p>
+            
+            <div class="reviews-grid">
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-avatar">RS</div>
+                        <div class="reviewer-info">
+                            <h4>Rajesh Sharma</h4>
+                            <p>IT Security Manager, TechCorp India</p>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <p class="review-text">
+                        Code2Clean has revolutionized our IT asset recycling process. The NIST compliance and digital certificates give us complete confidence in our data sanitization. The bootable mode is perfect for our secure environments.
+                    </p>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-avatar">PK</div>
+                        <div class="reviewer-info">
+                            <h4>Priya Khanna</h4>
+                            <p>Cybersecurity Analyst, DataSecure Solutions</p>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <p class="review-text">
+                        The cross-platform support is incredible. We can now handle Windows, Linux, and Android devices with a single solution. The hidden area wiping (HPA/DCO) feature is exactly what we needed for enterprise-grade security.
+                    </p>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-avatar">AM</div>
+                        <div class="reviewer-info">
+                            <h4>Amit Mehta</h4>
+                            <p>Chief Technology Officer, GreenTech Recycling</p>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <p class="review-text">
+                        The tamper-proof digital certificates have made our compliance audits seamless. Third-party verification capability has increased client trust by 300%. This is the future of secure data wiping.
+                    </p>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-avatar">SG</div>
+                        <div class="reviewer-info">
+                            <h4>Sneha Gupta</h4>
+                            <p>Systems Administrator, FinanceSecure Bank</p>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <p class="review-text">
+                        One-click operation with military-grade security - that's Code2Clean. The offline capability ensures our sensitive financial data never touches the internet during sanitization. Absolutely essential tool.
+                    </p>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-avatar">VT</div>
+                        <div class="reviewer-info">
+                            <h4>Vikash Tiwari</h4>
+                            <p>IT Director, Manufacturing Plus Ltd</p>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <p class="review-text">
+                        The multiple wiping algorithms (DoD 3-pass, Gutmann 35-pass) give us flexibility for different security requirements. SSD support with ATA Secure Erase is phenomenal. Best investment we made this year.
+                    </p>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-avatar">NK</div>
+                        <div class="reviewer-info">
+                            <h4>Neha Kapoor</h4>
+                            <p>Information Security Lead, HealthTech Systems</p>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <p class="review-text">
+                        Healthcare data requires the highest security standards. Code2Clean's NIST SP 800-88 compliance and comprehensive reporting have made our HIPAA audits stress-free. Exceptional product quality.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 SecureWipe Pro - SIH 2025 Innovation Project. Securing digital futures through trustworthy IT asset recycling.</p>
+            <p>&copy; 2025 Code2Clean - SIH 2025 Innovation Project. Securing digital futures through trustworthy IT asset recycling.</p>
         </div>
     </footer>
 
@@ -720,89 +1144,16 @@
             }, 1500);
         }
 
-        // Show registration form (this would typically be a redirect)
+        // Redirect directly to your signup page
         function showRegistrationForm(platform) {
-            // Create modal for registration
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0,0,0,0.8);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 10000;
-                backdrop-filter: blur(10px);
-            `;
+            // Store platform info for later use
+            localStorage.setItem('downloadPlatform', platform);
             
-            modal.innerHTML = `
-                <div style="
-                    background: var(--white);
-                    border-radius: 20px;
-                    padding: 2rem;
-                    max-width: 400px;
-                    width: 90%;
-                    text-align: center;
-                    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-                ">
-                    <h3 style="color: var(--text); margin-bottom: 1rem;">Registration Required</h3>
-                    <p style="color: var(--text-light); margin-bottom: 2rem;">
-                        Please register to download SecureWipe Pro for ${platform}. 
-                        This helps us provide better support and updates.
-                    </p>
-                    <div style="display: flex; gap: 1rem;">
-                        <button onclick="proceedToRegistration()" style="
-                            flex: 1;
-                            background: linear-gradient(135deg, var(--primary), var(--secondary));
-                            color: white;
-                            border: none;
-                            padding: 1rem;
-                            border-radius: 10px;
-                            cursor: pointer;
-                            font-weight: 600;
-                        ">Register Now</button>
-                        <button onclick="closeModal()" style="
-                            flex: 1;
-                            background: transparent;
-                            color: var(--text);
-                            border: 2px solid var(--border);
-                            padding: 1rem;
-                            border-radius: 10px;
-                            cursor: pointer;
-                            font-weight: 600;
-                        ">Cancel</button>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-            
-            // Close modal function
-            window.closeModal = function() {
-                document.body.removeChild(modal);
-                // Reset download buttons
-                document.querySelectorAll('.download-btn').forEach(btn => {
-                    btn.classList.remove('loading');
-                    btn.innerHTML = btn.innerHTML.replace('Preparing Download...', 
-                        btn.closest('.download-card').querySelector('.download-platform').textContent.includes('Windows') ? 'Download Desktop Version' :
-                        btn.closest('.download-card').querySelector('.download-platform').textContent.includes('Android') ? 'Download Android App' :
-                        'Download Bootable Image'
-                    );
-                });
-            };
-            
-            // Proceed to registration
-    window.proceedToRegistration = function() {
-        // Mark that user came from download
-        localStorage.setItem("downloadPending", "true");
-        // Redirect user to signup page
-        window.location.href = "signup.html";
-    };
+            // 🔥 REPLACE 'signup.html' with the actual path to your signup page
+            window.location.href = 'signup.html?platform=' + platform + '&source=download';
         }
 
+        // Smooth scrolling for internal links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -816,9 +1167,21 @@
             });
         });
 
+        // Initialize theme on load
         document.addEventListener('DOMContentLoaded', function() {
             loadTheme();
             
+            // Navbar scroll effect
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+            
+            // Add some interactive animations
             const observerOptions = {
                 threshold: 0.1,
                 rootMargin: '0px 0px -50px 0px'
@@ -833,7 +1196,8 @@
                 });
             }, observerOptions);
             
-            document.querySelectorAll('.feature-card, .download-card, .spec-item').forEach(card => {
+            // Observe all cards
+            document.querySelectorAll('.feature-card, .download-card, .spec-item, .review-card').forEach(card => {
                 observer.observe(card);
             });
         });
