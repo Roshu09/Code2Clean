@@ -1093,7 +1093,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Code2Clean - SIH 2025 Innovation Project. Securing digital futures through trustworthy IT asset recycling.</p>
+            <p>&copy; 2025 SecureWipe Pro - SIH 2025 Innovation Project. Securing digital futures through trustworthy IT asset recycling.</p>
         </div>
     </footer>
 
@@ -1146,14 +1146,87 @@
 
         // Redirect directly to your signup page
         function showRegistrationForm(platform) {
-            // Store platform info for later use
-            localStorage.setItem('downloadPlatform', platform);
+            // Create modal for registration
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+                backdrop-filter: blur(10px);
+            `;
             
-            // 🔥 REPLACE 'signup.html' with the actual path to your signup page
-            window.location.href = 'signup.html?platform=' + platform + '&source=download';
+            modal.innerHTML = `
+                <div style="
+                    background: var(--white);
+                    border-radius: 20px;
+                    padding: 2rem;
+                    max-width: 400px;
+                    width: 90%;
+                    text-align: center;
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                ">
+                    <h3 style="color: var(--text); margin-bottom: 1rem;">Registration Required</h3>
+                    <p style="color: var(--text-light); margin-bottom: 2rem;">
+                        Please register to download SecureWipe Pro for ${platform}. 
+                        This helps us provide better support and updates.
+                    </p>
+                    <div style="display: flex; gap: 1rem;">
+                        <button onclick="proceedToRegistration()" style="
+                            flex: 1;
+                            background: linear-gradient(135deg, var(--primary), var(--secondary));
+                            color: white;
+                            border: none;
+                            padding: 1rem;
+                            border-radius: 10px;
+                            cursor: pointer;
+                            font-weight: 600;
+                        ">Register Now</button>
+                        <button onclick="closeModal()" style="
+                            flex: 1;
+                            background: transparent;
+                            color: var(--text);
+                            border: 2px solid var(--border);
+                            padding: 1rem;
+                            border-radius: 10px;
+                            cursor: pointer;
+                            font-weight: 600;
+                        ">Cancel</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Close modal function
+            window.closeModal = function() {
+                document.body.removeChild(modal);
+                // Reset download buttons
+                document.querySelectorAll('.download-btn').forEach(btn => {
+                    btn.classList.remove('loading');
+                    btn.innerHTML = btn.innerHTML.replace('Preparing Download...', 
+                        btn.closest('.download-card').querySelector('.download-platform').textContent.includes('Windows') ? 'Download Desktop Version' :
+                        btn.closest('.download-card').querySelector('.download-platform').textContent.includes('Android') ? 'Download Android App' :
+                        'Download Bootable Image'
+                    );
+                });
+            };
+            
+            // Proceed to registration
+    window.proceedToRegistration = function() {
+        // Mark that user came from download
+        localStorage.setItem("downloadPending", "true");
+        // Redirect user to signup page
+        window.location.href = "signup.html";
+    };
         }
 
-        // Smooth scrolling for internal links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
